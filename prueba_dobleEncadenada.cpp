@@ -15,7 +15,7 @@ class lista{
 			cab=NULL;
 			col=NULL;
 		}
-		void insertar_final(nodo*apuntador);
+		void insertar_final(int valor);
 		bool lista_vacia();
 		int tamano_lista();
 		void insertar(int valor,int pos);
@@ -41,9 +41,17 @@ void lista :: insertar(int info,int pos){
 	nuevo->valor = info;
 	nuevo->sig = NULL;
 	nuevo->ant = NULL;
-	if (pos>tam){
-		insertar_final(nuevo);
-	} else{
+	if (pos>tam || pos<=0){
+		insertar_final(info);
+	} else if(pos==1){
+		aux=cab;
+		nuevo->sig=cab;
+		cab->ant =nuevo;
+		nuevo->ant = col;
+		col->sig = nuevo;
+		cab=nuevo;
+		tam = tam+1;
+	}else{
 		aux = cab;
 		for (int i =1;i<pos-1;i++){
 			aux=aux->sig;
@@ -60,7 +68,11 @@ void lista :: insertar(int info,int pos){
 		tam = tam+1;	
 	}	
 }
-void lista :: insertar_final(nodo *nuevo){
+void lista :: insertar_final(int info){
+	nodo *nuevo= new nodo;
+	nuevo->valor=info;
+	nuevo->sig=NULL;
+	nuevo->ant=NULL;
 	nodo *aux=cab;
 	if (tam==0){
 		cab= nuevo;
@@ -96,11 +108,27 @@ void lista :: eliminar(int pos){
 	nodo *aux;
 	nodo *eliminar;
 	nodo *aux1;
-	if (pos>tam){
+	if (pos>tam || pos<=0){
 		cout<<"No existe esta posicion"<<endl;
 	} else if(pos==1){
-		cout<<"No se puede elimina esta posicion"<<endl;
-	}else{
+		aux=cab;
+		aux=aux->sig;
+		cab->sig=NULL;
+		aux->ant = col;
+		col->sig=aux;
+		cab=aux;
+		
+		tam = tam-1;
+	}else if(pos==tam){
+		aux=col;
+		aux=aux->ant;
+		col->ant=NULL;
+		aux->sig = cab;
+		cab->ant=aux;
+		col=aux;
+		
+		tam = tam-1;
+	} else{
 		aux = cab;
 		eliminar = cab;
 		aux1=col;
@@ -143,11 +171,12 @@ int main(){
 		cout<<"1.Saber el tamano de la lista"<<endl;
 		cout<<"2.Saber si la lista esta vacia"<<endl;
 		cout<<"3.Ingresar un nuevo elemento"<<endl;
-		cout<<"4.Mostrar la lista ascendentemente"<<endl;
-		cout<<"5.Mostrar la lista descendentemente"<<endl;
-		cout<<"6.Eliminar elemento"<<endl;
-		cout<<"7.Mostrar un elemento de la lista"<<endl;
-		cout<<"8.Salir del menu"<<endl;
+		cout<<"4.Ingresar un nuevo elemento en la ultima posicion"<<endl;
+		cout<<"5.Mostrar la lista ascendentemente"<<endl;
+		cout<<"6.Mostrar la lista descendentemente"<<endl;
+		cout<<"7.Eliminar elemento"<<endl;
+		cout<<"8.Mostrar un elemento de la lista"<<endl;
+		cout<<"9.Salir del menu"<<endl;
 		cin>>n;
 		if(n==1){
 			cout<<"EL tamano de la lista es: "<<a.tamano_lista()<<endl;
@@ -163,20 +192,24 @@ int main(){
 			cin>>pos;
 			a.insertar(valor,pos);	
 		}else if(n==4){
+			cout<<"Ingrese el nuevo valor "<<endl;
+			cin>>valor;
+			a.insertar_final(valor);
+		}else if(n==5){
 			cout<<"La lista es "<<endl;
 			a.imprimir_lista_asc();
-		} else if(n==5){
+		} else if(n==6){
 			cout<<"La lista es "<<endl;
 			a.imprimir_lista_des();
-		} else if(n==6){
+		} else if(n==7){
 			cout<<"Ingresar la posicion que desea eliminar "<<endl;
 			cin>>pos;
 			a.eliminar(pos);
-		}else if(n==7){
+		}else if(n==8){
 			cout<<"Ingresar la posicion del dato desea ver "<<endl;
 			cin>>pos;
 			a.imprimir_dato(pos);
-		}else if(n==8){
+		}else if(n==9){
 			aux=aux+1;
 		}else{
 			cout<<"Opcion incorrecta"<<endl;
